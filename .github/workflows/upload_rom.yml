@@ -1,0 +1,46 @@
+name: Upload_Transfer
+
+on:
+  watch:
+    types: [started]
+    
+env:
+  ROM_URL: https://static.cowtransfer.com/0e7c08ee-0ce3-4c02-9c3c-b0de22630acb%2Fc89d7873-d643-4c3c-990d-a7a7914cee18%2FMIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip?onett=40d7cf15d964f66a2a1657fa1bf3d0f3&attname=0e7c08ee-0ce3-4c02-9c3c-b0de22630acb%252Fc89d7873-d643-4c3c-990d-a7a7914cee18%252FMIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip
+  ROM_NAME: MIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+       - name: Checkout
+         uses: actions/checkout@master
+           
+       - name: Initialization environment
+         run: |
+            sudo -E apt-get -qq update
+            sudo -E apt-get -qq install wget curl
+       
+       - name: Download Rom
+         run: wget -c $ROM_URL
+       
+       - name: Upload Rom to WeTransfer
+         run: |
+              curl -sL https://git.io/file-transfer | sh
+              ./transfer wet $ROM_NAME
+
+       - name: Upload Rom to Bitsend
+         run: ./transfer bit $ROM_NAME
+              
+       - name: Upload Rom to GoFile
+         run: ./transfer gof $ROM_NAME
+
+       - name: Upload Rom to TmpLink
+         run: ./transfer tmp $ROM_NAME
+              
+       - name: Upload Rom to FileLink
+         run: ./transfer flk $ROM_NAME
+
+       - name: Upload Rom to Transfer
+         run: ./transfer trs $ROM_NAME
