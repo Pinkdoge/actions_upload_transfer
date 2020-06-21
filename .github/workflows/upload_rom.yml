@@ -36,11 +36,3 @@ jobs:
        - name: Upload Rom to GoFile
          run: ./transfer gof $ROM_NAME
 
-       - name: Upload Rom to TmpLink
-         run: ./transfer tmp $ROM_NAME
-              
-       - name: Upload Rom to FileLink
-         run: ./transfer flk $ROM_NAME
-
-       - name: Upload Rom to Transfer
-         run: ./transfer trs $ROM_NAME
