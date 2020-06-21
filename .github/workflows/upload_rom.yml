@@ -7,7 +7,8 @@ on:
 env:
   ROM_URL: https://static.cowtransfer.com/0e7c08ee-0ce3-4c02-9c3c-b0de22630acb%2Fc89d7873-d643-4c3c-990d-a7a7914cee18%2FMIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip?onett=40d7cf15d964f66a2a1657fa1bf3d0f3&attname=0e7c08ee-0ce3-4c02-9c3c-b0de22630acb%252Fc89d7873-d643-4c3c-990d-a7a7914cee18%252FMIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip
   ROM_NAME: MIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip
-
+  ROM_VER: MIUI12.1 20.6.18 EU
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,14 +26,24 @@ jobs:
        - name: Download Rom
          run: wget -c $ROM_URL -O $ROM_NAME
        
-       - name: Upload Rom to WeTransfer
-         run: |
-              curl -sL https://git.io/file-transfer | sh
-              ./transfer wet $ROM_NAME
+       - name: Upload TWRP
+         uses: softprops/action-gh-release@v1
+         with:
+           files: $ROM_NAME
+           name: $ROM_VER by Pinkdoge
+           tag_name: vince
+           body: $ROM_VER by Pinkdoge
+         env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         
+#       - name: Upload Rom to WeTransfer
+#         run: |
+#              curl -sL https://git.io/file-transfer | sh
+#             ./transfer wet $ROM_NAME
 
-       - name: Upload Rom to Bitsend
-         run: ./transfer bit $ROM_NAME
+#       - name: Upload Rom to Bitsend
+#         run: ./transfer bit $ROM_NAME
               
-       - name: Upload Rom to GoFile
-         run: ./transfer gof $ROM_NAME
+#       - name: Upload Rom to GoFile
+#         run: ./transfer gof $ROM_NAME
 
