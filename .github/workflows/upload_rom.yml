@@ -29,10 +29,10 @@ jobs:
        - name: Upload TWRP
          uses: softprops/action-gh-release@v1
          with:
-           files: $ROM_NAME
-           name: $ROM_VER by Pinkdoge
+           files: MIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip
+           name: MIUI 12.1 20.6.18 eu by Pinkdoge
            tag_name: vince
-           body: $ROM_VER by Pinkdoge
+           body: Synchronous upstream source code update
          env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          
