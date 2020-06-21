@@ -23,7 +23,7 @@ jobs:
             sudo -E apt-get -qq install wget curl
        
        - name: Download Rom
-         run: wget -c $ROM_URL
+         run: wget -c $ROM_URL -O $ROM_NAME
        
        - name: Upload Rom to WeTransfer
          run: |
