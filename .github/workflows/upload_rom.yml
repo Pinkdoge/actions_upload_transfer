@@ -29,16 +29,15 @@ jobs:
           echo "::set-output name=rom_author::$(jq -r '.rom_author' config.json)"
           id: var
 
-       
        - name: Download Rom
-         run: wget -c $ROM_URL -O $ROM_NAME
+         run: wget -c ${{ steps.var.outputs.rom_url }} -O ${{ steps.var.outputs.rom_from }}-${{ steps.var.outputs.and_ver }}_${{ steps.var.outputs.rom_ver }}-${{ steps.var.outputs.rom_origin }}_${{ steps.var.outputs.device_name }}_${{ steps.var.outputs.rom_author }}.zip
        
        - name: Upload Rom To Release
          uses: softprops/action-gh-release@v1
          with:
-           files: MIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip
-           name: MIUI 12.1 20.6.18 eu by Pinkdoge
-           tag_name: vince
+           files: ${{ steps.var.outputs.rom_from }}-${{ steps.var.outputs.and_ver }}_${{ steps.var.outputs.rom_ver }}-${{ steps.var.outputs.rom_origin }}_${{ steps.var.outputs.device_name }}_${{ steps.var.outputs.rom_author }}.zip
+           name: ${{ steps.var.outputs.rom_from }} ${{ steps.var.outputs.rom_ver }} ${{ steps.var.outputs.rom_origin }} ${{ steps.var.outputs.device_name }} by ${{ steps.var.outputs.rom_author }}
+           tag_name: ${{ steps.var.outputs.device_name }}
            body: Synchronous upstream source code update
          env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,11 +45,11 @@ jobs:
 #       - name: Upload Rom to WeTransfer
 #         run: |
 #              curl -sL https://git.io/file-transfer | sh
-#             ./transfer wet $ROM_NAME
+#             ./transfer wet ${{ steps.var.outputs.rom_from }}-${{ steps.var.outputs.and_ver }}_${{ steps.var.outputs.rom_ver }}-${{ steps.var.outputs.rom_origin }}_${{ steps.var.outputs.device_name }}_${{ steps.var.outputs.rom_author }}.zip
 
 #       - name: Upload Rom to Bitsend
-#         run: ./transfer bit $ROM_NAME
+#         run: ./transfer bit ${{ steps.var.outputs.rom_from }}-${{ steps.var.outputs.and_ver }}_${{ steps.var.outputs.rom_ver }}-${{ steps.var.outputs.rom_origin }}_${{ steps.var.outputs.device_name }}_${{ steps.var.outputs.rom_author }}.zip
               
 #       - name: Upload Rom to GoFile
-#         run: ./transfer gof $ROM_NAME
+#         run: ./transfer gof ${{ steps.var.outputs.rom_from }}-${{ steps.var.outputs.and_ver }}_${{ steps.var.outputs.rom_ver }}-${{ steps.var.outputs.rom_origin }}_${{ steps.var.outputs.device_name }}_${{ steps.var.outputs.rom_author }}.zip
 
