@@ -27,7 +27,7 @@ jobs:
           echo "::set-output name=rom_origin::$(jq -r '.rom_origin' config.json)"
           echo "::set-output name=device_name::$(jq -r '.device_name' config.json)"
           echo "::set-output name=rom_author::$(jq -r '.rom_author' config.json)"
-          id: var
+         id: var
 
        - name: Download Rom
          run: wget -c ${{ steps.var.outputs.rom_url }} -O ${{ steps.var.outputs.rom_from }}-${{ steps.var.outputs.and_ver }}_${{ steps.var.outputs.rom_ver }}-${{ steps.var.outputs.rom_origin }}_${{ steps.var.outputs.device_name }}_${{ steps.var.outputs.rom_author }}.zip
