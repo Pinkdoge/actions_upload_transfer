@@ -4,46 +4,53 @@ on:
   watch:
     types: [started]
     
-env:
-  ROM_URL: https://static.cowtransfer.com/0e7c08ee-0ce3-4c02-9c3c-b0de22630acb%2Fc89d7873-d643-4c3c-990d-a7a7914cee18%2FMIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip?onett=40d7cf15d964f66a2a1657fa1bf3d0f3&attname=0e7c08ee-0ce3-4c02-9c3c-b0de22630acb%252Fc89d7873-d643-4c3c-990d-a7a7914cee18%252FMIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip
-  ROM_NAME: MIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip
-  ROM_VER: MIUI12.1 20.6.18 EU
-  
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.repository.owner.id == github.event.sender.id
+    if: github.event.sender.id == 42758990
 
     steps:
        - name: Checkout
          uses: actions/checkout@master
-           
+         
        - name: Initialization environment
          run: |
             sudo -E apt-get -qq update
             sudo -E apt-get -qq install wget curl
-       
+
+       - name: Get variables
+         run: |
+          echo "::set-output name=rom_url::$(jq -r '.rom_url' config.json)"
+          echo "::set-output name=rom_from::$(jq -r '.rom_from' config.json)"
+          echo "::set-output name=and_ver::$(jq -r '.and_ver' config.json)"
+          echo "::set-output name=rom_ver::$(jq -r '.rom_ver' config.json)"
+          echo "::set-output name=rom_origin::$(jq -r '.rom_origin' config.json)"
+          echo "::set-output name=device_name::$(jq -r '.device_name' config.json)"
+          echo "::set-output name=rom_author::$(jq -r '.rom_author' config.json)"
+          echo "::set-output name=changelog::$(jq -r '.changelog' config.json)"
+         id: var
+
        - name: Download Rom
-         run: wget -c $ROM_URL -O $ROM_NAME
+         run: wget -c "${{ steps.var.outputs.rom_url }}" -O "${{ steps.var.outputs.rom_from }}-${{ steps.var.outputs.and_ver }}_${{ steps.var.outputs.rom_ver }}-${{ steps.var.outputs.rom_origin }}_${{ steps.var.outputs.device_name }}_${{ steps.var.outputs.rom_author }}.zip"
        
-       - name: Upload TWRP
+       - name: Upload Rom To Release
          uses: softprops/action-gh-release@v1
          with:
-           files: MIUI12-Q_20.6.18-eu_Vince_Pinkdoge.zip
-           name: MIUI 12.1 20.6.18 eu by Pinkdoge
-           tag_name: vince
-           body: Synchronous upstream source code update
+           files: ${{ steps.var.outputs.rom_from }}-${{ steps.var.outputs.and_ver }}_${{ steps.var.outputs.rom_ver }}-${{ steps.var.outputs.rom_origin }}_${{ steps.var.outputs.device_name }}_${{ steps.var.outputs.rom_author }}.zip
+           name: ${{ steps.var.outputs.rom_from }} ${{ steps.var.outputs.rom_ver }} ${{ steps.var.outputs.rom_origin }} ${{ steps.var.outputs.device_name }} by ${{ steps.var.outputs.rom_author }}
+           tag_name: ${{ steps.var.outputs.rom_ver }}
+           body: ${{ steps.var.outputs.changelog }}
          env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           GITHUB_TOKEN: ${{ secrets.PINKDOGE }}
          
 #       - name: Upload Rom to WeTransfer
 #         run: |
 #              curl -sL https://git.io/file-transfer | sh
-#             ./transfer wet $ROM_NAME
+#             ./transfer wet ${{ steps.var.outputs.rom_from }}-${{ steps.var.outputs.and_ver }}_${{ steps.var.outputs.rom_ver }}-${{ steps.var.outputs.rom_origin }}_${{ steps.var.outputs.device_name }}_${{ steps.var.outputs.rom_author }}.zip
 
 #       - name: Upload Rom to Bitsend
-#         run: ./transfer bit $ROM_NAME
+#         run: ./transfer bit ${{ steps.var.outputs.rom_from }}-${{ steps.var.outputs.and_ver }}_${{ steps.var.outputs.rom_ver }}-${{ steps.var.outputs.rom_origin }}_${{ steps.var.outputs.device_name }}_${{ steps.var.outputs.rom_author }}.zip
               
 #       - name: Upload Rom to GoFile
-#         run: ./transfer gof $ROM_NAME
+#         run: ./transfer gof ${{ steps.var.outputs.rom_from }}-${{ steps.var.outputs.and_ver }}_${{ steps.var.outputs.rom_ver }}-${{ steps.var.outputs.rom_origin }}_${{ steps.var.outputs.device_name }}_${{ steps.var.outputs.rom_author }}.zip
 
