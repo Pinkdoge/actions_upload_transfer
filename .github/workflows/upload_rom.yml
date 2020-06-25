@@ -41,7 +41,7 @@ jobs:
            tag_name: ${{ steps.var.outputs.rom_ver }}
            body: ${{ steps.var.outputs.changelog }}
          env:
-           GITHUB_TOKEN: ${{ secrets.Pinkdoge }}
+           GITHUB_TOKEN: ${{ secrets.PINKDOGE }}
          
 #       - name: Upload Rom to WeTransfer
 #         run: |
