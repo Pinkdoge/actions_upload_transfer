@@ -6,5 +6,6 @@
   "rom_ver": "20.6.18",
   "rom_origin": "eu",
   "device_name": "Vince",
-  "rom_author": "Pinkdoge"
+  "rom_author": "Pinkdoge",
+  "changelog": "Synchronous upstream source code update"
 }
